@@ -1,7 +1,6 @@
 from playwright.sync_api import Playwright, sync_playwright, expect
 from pathlib import Path
 import time
-import os
 from modulos.Credentials import getCredentials
 
 
@@ -18,8 +17,8 @@ def run(playwright: Playwright) -> None:
     page = context.new_page()
     page.goto("https://xom.ceccms.com/login.aspx")
     page.wait_for_load_state('networkidle')
-    page.get_by_placeholder("User Name").click()
     username, password = getCredentials()
+    page.get_by_placeholder("User Name").click()    
     page.get_by_placeholder("User Name").fill(username)
     page.get_by_placeholder("Password").click()
     page.get_by_placeholder("Password").fill(password)
@@ -47,8 +46,7 @@ def run(playwright: Playwright) -> None:
         print('filename: ', download.suggested_filename)
         download_filepath = Path(download.path())
         new_download_filepath = DOWNLOAD_BASE_PATH/download.suggested_filename
-        if new_download_filepath.is_file:
-            os.remove(new_download_filepath)
+        new_download_filepath.unlink(missing_ok=True)
         download_filepath.rename(new_download_filepath)
         files_downloaded.append(new_download_filepath)        
     time.sleep(2)
