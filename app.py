@@ -1,4 +1,4 @@
-from modules.Credentials import getSmartCompletionsCredentials, getSharepointCredentials
+from modules.KeyVault import getSmartCompletionsCredentials, getSharepointCredentials
 from playwright.sync_api import sync_playwright
 from modules.SmartCompletions import run_download
 from modules.Sharepoint import UploadFiles

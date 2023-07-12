@@ -1,13 +1,16 @@
-from azure.identity import DefaultAzureCredential, InteractiveBrowserCredential
+from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 
-credential = InteractiveBrowserCredential(
-    client_id="07420c3d-c141-4c67-b6f3-f448e5adb67b",
-)
-# credential = DefaultAzureCredential()
 
+credential = DefaultAzureCredential()
 secret_client = SecretClient(vault_url="https://kv-kpd-scus-epl-dev.vault.azure.net/", credential=credential)
-secret = secret_client.get_secret("SmartCompletionsWeb-XOM-UserName")
 
-print(secret.name)
-print(secret.value)
+def getSmartCompletionsCredentials():
+    username_secret = secret_client.get_secret("SmartCompletionsWeb-XOM-UserName")
+    password_secret = secret_client.get_secret("SmartCompletionsWeb-XOM-Password")
+    return username_secret.value, password_secret.value
+
+def getSharepointCredentials():
+    account_secret = secret_client.get_secret("ADServiceAccount-PDW-SVC-UserName")
+    password_secret = secret_client.get_secret("ADServiceAccount-PDW-SVC-Password")
+    return f'{account_secret.value}@Kiewit.com', password_secret.value
